@@ -1,240 +1,1168 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asma's Online | Professional Dashboard V13.0</title>
+    <title>Asma's Online | Master Service Portal V15.0</title>
     <style>
-        /* വെബ്സൈറ്റ് പൊതുവായ ഡിസൈൻ */
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: 'Inter', 'Segoe UI', sans-serif; 
-            background-color: #0b0f1a; 
-            color: #e2e8f0; 
-            display: flex; 
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: #0b0f1a;
+            color: #e2e8f0;
+            display: flex;
             min-height: 100vh;
+            line-height: 1.5;
         }
-        
-        /* Sidebar Navigation */
-        .sidebar { 
-            width: 260px; background: #111827; height: 100vh; padding: 20px; 
-            position: fixed; left: 0; top: 0; border-right: 1px solid #1f2937; 
-            display: flex; flex-direction: column; z-index: 1000;
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 260px;
+            background: #111827;
+            height: 100vh;
+            padding: 22px 16px;
+            position: fixed;
+            left: 0; top: 0;
+            border-right: 1px solid #1f2937;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            overflow-y: auto;
         }
-        .sidebar h1 { color: #fbbf24; font-size: 22px; text-align: center; font-weight: 900; }
-        .sidebar p { font-size: 10px; text-align: center; color: #6366f1; margin-bottom: 25px; font-weight: bold; }
-        .sidebar a { color: #9ca3af; text-decoration: none; display: block; padding: 12px 15px; border-radius: 10px; margin-bottom: 5px; transition: 0.3s; font-size: 13px; }
-        .sidebar a:hover { background: #1f2937; color: #fbbf24; }
-
-        /* Main Workspace */
-        .main { 
-            margin-left: 260px; padding: 30px; flex-grow: 1; width: calc(100% - 260px);
+        .sidebar-brand {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #1f2937;
         }
-        
-        /* Search Bar */
-        .search-container { margin-bottom: 25px; display: flex; }
-        .search-input { flex-grow: 1; padding: 12px 20px; border-radius: 12px; border: 1px solid #374151; background: #1f2937; color: white; outline: none; }
+        .sidebar-brand h1 {
+            color: #fbbf24;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .sidebar-brand p {
+            font-size: 10px;
+            color: #6366f1;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+        .nav-links { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .nav-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            border-radius: 10px;
+            transition: all 0.2s;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .nav-links a:hover {
+            background: #1f2937;
+            color: #fbbf24;
+            transform: translateX(3px);
+        }
+        .nav-links a.active {
+            background: #1f2937;
+            color: #fbbf24;
+            border-left: 3px solid #fbbf24;
+            border-radius: 10px 6px 6px 10px;
+            font-weight: 700;
+        }
+        .insurance-btn {
+            margin-top: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 6px 20px -6px rgba(16, 185, 129, 0.5);
+            transition: transform 0.2s;
+        }
+        .insurance-btn:hover { transform: translateY(-2px); }
+        .insurance-btn a {
+            color: white;
+            font-weight: 800;
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            display: block;
+        }
 
-        /* Section Styling */
-        .section-box { margin-bottom: 35px; }
-        .section-title { font-size: 17px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: #f8fafc; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 15px; }
-        .card { background: #1f2937; padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #374151; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); border-color: #fbbf24; background: #262f3f; }
-        .card h3 { font-size: 14px; margin-bottom: 12px; color: #f1f5f9; min-height: 40px; display: flex; align-items: center; justify-content: center; }
-        .action-btn { background: #374151; color: white; padding: 10px; text-decoration: none; border-radius: 10px; font-size: 11px; font-weight: 700; display: block; margin-top: 10px; }
-        .card:hover .action-btn { background: #fbbf24; color: #000; }
+        /* ===== MAIN ===== */
+        .main {
+            margin-left: 260px;
+            padding: 28px 36px;
+            flex-grow: 1;
+            width: calc(100% - 260px);
+            min-height: 100vh;
+            background: radial-gradient(circle at 20% 10%, #101624 0%, #0b0f1a 90%);
+        }
 
-        /* Receipt Form UI */
-        .form-container { background: #1f2937; padding: 25px; border-radius: 15px; border: 1px solid #374151; max-width: 500px; }
-        .form-container input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #374151; background: #0b0f1a; color: white; }
-        .print-trigger-btn { background: #6366f1; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: 800; cursor: pointer; }
+        /* ===== TOP BAR ===== */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .top-bar h2 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #f8fafc;
+            letter-spacing: -0.4px;
+        }
+        .top-bar p {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+        .top-stats {
+            display: flex;
+            gap: 12px;
+        }
+        .top-stat {
+            background: #111827;
+            border: 1px solid #1f2937;
+            padding: 10px 18px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 110px;
+        }
+        .top-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+        .top-stat-label {
+            font-size: 10px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
 
-        /* PRINT STYLES - പ്രിന്റിലെ കറുത്ത നിറം പൂർണ്ണമായി ഒഴിവാക്കാൻ */
+        /* ===== SEARCH ===== */
+        .search-container {
+            margin-bottom: 28px;
+            display: flex;
+            gap: 10px;
+        }
+        .search-input {
+            flex-grow: 1;
+            padding: 13px 20px;
+            border-radius: 12px;
+            border: 1px solid #374151;
+            background: #1f2937;
+            color: white;
+            outline: none;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border 0.2s;
+        }
+        .search-input:focus { border-color: #fbbf24; }
+        .search-input::placeholder { color: #64748b; }
+
+        /* ===== SECTIONS ===== */
+        .section-box { margin-bottom: 36px; scroll-margin-top: 20px; }
+        .section-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #f8fafc;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px currentColor;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .card {
+            background: linear-gradient(145deg, #1f2937, #1a2332);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #374151;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #fbbf24, #6366f1, #10b981);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .card:hover::before { opacity: 1; }
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: #fbbf24;
+            box-shadow: 0 16px 32px -12px rgba(251, 191, 36, 0.25);
+        }
+        .card-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .card h3 {
+            font-size: 14px;
+            margin-bottom: 14px;
+            color: #f1f5f9;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .action-btn {
+            background: #374151;
+            color: white;
+            padding: 10px 14px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            display: block;
+            margin-top: 10px;
+            transition: all 0.2s;
+            letter-spacing: 0.3px;
+            border: 1px solid transparent;
+        }
+        .card:hover .action-btn {
+            background: #fbbf24;
+            color: #000;
+            border-color: #fbbf24;
+        }
+        .card-highlight {
+            border-color: #6366f1;
+            background: linear-gradient(145deg, #1e1b4b, #1f2937);
+        }
+        .card-highlight:hover { border-color: #818cf8; }
+        .card-highlight .action-btn { background: #4f46e5; }
+        .card-highlight:hover .action-btn { background: #818cf8; color: #000; }
+
+        /* ===== RECEIPT FORM ===== */
+        .receipt-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .form-container {
+            background: #1f2937;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid #374151;
+        }
+        .form-container h3 {
+            font-size: 15px;
+            margin-bottom: 18px;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .form-group { margin-bottom: 14px; }
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .form-container input, .form-container select {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid #374151;
+            background: #0b0f1a;
+            color: white;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border 0.2s;
+        }
+        .form-container input:focus, .form-container select:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+        .print-trigger-btn {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+            margin-top: 6px;
+            font-family: inherit;
+        }
+        .print-trigger-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px -8px rgba(99, 102, 241, 0.6);
+        }
+
+        /* ===== RECEIPT PREVIEW ===== */
+        .receipt-preview {
+            background: #1f2937;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid #374151;
+            display: flex;
+            flex-direction: column;
+        }
+        .receipt-preview h3 {
+            font-size: 15px;
+            margin-bottom: 18px;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .preview-paper {
+            background: #f8fafc;
+            color: #111;
+            border-radius: 10px;
+            padding: 20px;
+            flex: 1;
+            font-family: 'Courier New', monospace;
+            border: 2px dashed #94a3b8;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+        .preview-paper .pv-header {
+            text-align: center;
+            border-bottom: 2px solid #111;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+        .preview-paper .pv-header h4 {
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+        }
+        .preview-paper .pv-header p {
+            font-size: 10px;
+            color: #475569;
+            margin-top: 2px;
+        }
+        .pv-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            padding: 7px 0;
+            border-bottom: 1px dotted #94a3b8;
+        }
+        .pv-row:last-of-type { border-bottom: none; }
+        .pv-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 17px;
+            font-weight: 900;
+            margin-top: auto;
+            padding-top: 14px;
+            border-top: 2px solid #111;
+        }
+        .pv-sign {
+            text-align: right;
+            font-size: 10px;
+            color: #475569;
+            margin-top: 22px;
+        }
+        .empty-preview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            color: #94a3b8;
+            font-size: 13px;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* ===== HISTORY TABLE ===== */
+        .history-panel {
+            background: #1f2937;
+            border-radius: 16px;
+            border: 1px solid #374151;
+            padding: 22px;
+            margin-top: 28px;
+        }
+        .history-panel h3 {
+            font-size: 15px;
+            margin-bottom: 16px;
+            color: #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .history-clear {
+            background: transparent;
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .history-clear:hover { background: #ef4444; color: white; }
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .history-table th {
+            text-align: left;
+            padding: 10px 8px;
+            color: #64748b;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #374151;
+            font-weight: 700;
+        }
+        .history-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #2a3444;
+            color: #e2e8f0;
+        }
+        .history-table tr:hover td { background: #252f3f; }
+        .history-amount {
+            color: #4ade80;
+            font-weight: 700;
+            text-align: right;
+        }
+        .history-empty {
+            text-align: center;
+            color: #64748b;
+            padding: 30px;
+            font-size: 13px;
+        }
+        .history-actions {
+            text-align: center;
+        }
+        .history-actions button {
+            background: transparent;
+            border: 1px solid #475569;
+            color: #94a3b8;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .history-actions button:hover { border-color: #fbbf24; color: #fbbf24; }
+
+        /* ===== PRINT ===== */
         #printableReceipt { display: none; }
 
         @media print {
             @page { size: A4; margin: 0; }
-            html, body { 
-                background: white !important; 
-                background-color: white !important; 
+            html, body {
+                background: white !important;
                 color: black !important;
                 height: auto;
+                display: block !important;
             }
-            /* പ്രിന്റ് ചെയ്യുമ്പോൾ വെബ്സൈറ്റ് ബോഡി ഭാഗങ്ങൾ മറയ്ക്കുന്നു */
-            .sidebar, .main, #receipt, .search-container { display: none !important; }
-            
-            #printableReceipt { 
-                display: block !important; 
+            .sidebar, .main, .top-bar, .search-container, .toast { display: none !important; }
+            #printableReceipt {
+                display: block !important;
                 position: relative;
                 width: 100%;
                 background: white !important;
                 color: black !important;
-                padding: 20mm 15mm;
+                padding: 15mm 12mm;
             }
             .receipt-copy {
                 width: 180mm;
-                margin: 0 auto 25mm auto;
+                margin: 0 auto 15mm auto;
                 border: 2px solid #000;
-                padding: 12mm;
-                border-radius: 8px;
+                padding: 10mm 12mm;
+                border-radius: 6px;
                 background: white !important;
                 color: black !important;
                 page-break-inside: avoid;
             }
-            .receipt-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 12px; margin-bottom: 15px; }
-            .receipt-row { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 17px; border-bottom: 1px dotted #888; padding-bottom: 5px; color: black !important; }
+            .receipt-copy:last-child { margin-bottom: 0; }
+            .receipt-header {
+                text-align: center;
+                border-bottom: 2px solid #000;
+                padding-bottom: 10px;
+                margin-bottom: 14px;
+            }
+            .receipt-header h2 {
+                font-size: 20px;
+                font-weight: 900;
+                color: black !important;
+                letter-spacing: 0.5px;
+            }
+            .receipt-header p { font-size: 11px; color: #333 !important; margin-top: 2px; }
+            .receipt-row {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 12px;
+                font-size: 15px;
+                border-bottom: 1px dotted #888;
+                padding-bottom: 5px;
+                color: black !important;
+            }
+            .receipt-total {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 18px;
+                font-size: 20px;
+                font-weight: 900;
+                border-top: 2px solid #000;
+                padding-top: 12px;
+                color: black !important;
+            }
+            .copy-label {
+                text-align: right;
+                font-size: 9px;
+                font-weight: 700;
+                color: #555;
+                margin-bottom: 6px;
+                letter-spacing: 1px;
+            }
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-left: 4px solid #10b981;
+            padding: 14px 22px;
+            border-radius: 10px;
+            color: #f1f5f9;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 10px 30px -8px rgba(0,0,0,0.8);
+            transform: translateY(150%);
+            transition: transform 0.3s;
+            z-index: 2000;
+            max-width: 320px;
+        }
+        .toast.show { transform: translateY(0); }
+        .toast.error { border-left-color: #ef4444; }
+
+        /* ===== MOBILE ===== */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 1500;
+            background: #1f2937;
+            border: 1px solid #374151;
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            color: #fbbf24;
+            font-size: 20px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+        .backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 900;
+            backdrop-filter: blur(2px);
+        }
+        .backdrop.show { display: block; }
+
+        @media (max-width: 1000px) {
+            .receipt-layout { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 760px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main { margin-left: 0; width: 100%; padding: 70px 18px 24px 18px; }
+            .menu-toggle { display: flex; }
+            .top-bar h2 { font-size: 18px; }
+            .top-stats { width: 100%; }
+            .top-stat { flex: 1; min-width: 0; padding: 8px 10px; }
+            .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+        }
+        @media (max-width: 480px) {
+            .top-stats { flex-wrap: wrap; }
+            .top-stat { min-width: calc(50% - 6px); }
+            .history-table { font-size: 11px; }
+            .history-table th, .history-table td { padding: 8px 4px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <h1>ASMA'S</h1>
-        <p>MASTER PORTAL V13.0</p>
-        <a href="#receipt">🧾 Cash Receipt</a>
-        <a href="#travel">🎫 Passport & Travel</a>
-        <a href="#health">🏥 Health Services</a>
-        <a href="#finance">💳 PAN & Finance</a>
-        <a href="#rto">🚗 RTO Services</a>
-        <a href="#govt">🏛️ Govt Services</a>
-        <a href="#payment">💰 Treasury & Welfare</a>
-        <div style="margin-top: auto; background: #10b981; padding: 12px; border-radius: 10px; text-align: center;">
-            <a href="https://app.turtlemintpro.com/home" target="_blank" style="color:white; font-weight:800; text-decoration:none;">INSURANCE LOGIN</a>
-        </div>
-    </div>
+    <!-- Mobile Menu -->
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+    <div class="backdrop" id="backdrop" onclick="toggleSidebar()"></div>
 
-    <div class="main">
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <h1>ASMA'S</h1>
+            <p>MASTER PORTAL V15.0</p>
+        </div>
+        <nav class="nav-links">
+            <a href="#receipt" onclick="scrollToSection('receipt', this)" class="active">🧾 Cash Receipt</a>
+            <a href="#visa" onclick="scrollToSection('visa', this)">🛂 Visa Services</a>
+            <a href="#revenue" onclick="scrollToSection('revenue', this)">🏛️ Revenue Dept</a>
+            <a href="#travel" onclick="scrollToSection('travel', this)">🎫 Travel & Passport</a>
+            <a href="#health" onclick="scrollToSection('health', this)">🏥 Health Services</a>
+            <a href="#finance" onclick="scrollToSection('finance', this)">💳 PAN & Finance</a>
+            <a href="#rto" onclick="scrollToSection('rto', this)">🚗 RTO Services</a>
+            <a href="#govt" onclick="scrollToSection('govt', this)">🏛️ Govt Services</a>
+            <a href="#payment" onclick="scrollToSection('payment', this)">💰 Treasury & Welfare</a>
+            <a href="#history" onclick="scrollToSection('history', this)">📋 Receipt History</a>
+        </nav>
+        <div class="insurance-btn">
+            <a href="https://app.turtlemintpro.com/home" target="_blank">🛡️ INSURANCE LOGIN</a>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN ===== -->
+    <main class="main">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div>
+                <h2 id="currentTitle">Welcome to Asma's Online 👋</h2>
+                <p id="currentSubtitle">Your complete service center — everything in one place.</p>
+            </div>
+            <div class="top-stats">
+                <div class="top-stat">
+                    <div class="top-stat-value" id="todayReceipts">0</div>
+                    <div class="top-stat-label">Today's Receipts</div>
+                </div>
+                <div class="top-stat">
+                    <div class="top-stat-value" id="todayRevenue">₹0</div>
+                    <div class="top-stat-label">Today's Revenue</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search -->
         <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="സേവനങ്ങൾ തിരയൂ..." onkeyup="searchServices()">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 സേവനങ്ങൾ തിരയൂ... (Search services)" onkeyup="searchServices()">
         </div>
 
+        <!-- ===== RECEIPT SECTION ===== -->
         <div id="receipt" class="section-box">
-            <div class="section-title"><div class="dot" style="background: #6366f1;"></div> Cash Receipt Generator</div>
-            <div class="form-container">
-                <input type="text" id="custName" placeholder="Customer Name">
-                <input type="text" id="servName" placeholder="Service Name">
-                <input type="number" id="amt" placeholder="Amount (₹)">
-                <button class="print-trigger-btn" onclick="generateAndPrint()">PRINT A4 RECEIPT</button>
+            <div class="section-title"><div class="dot" style="background:#6366f1;"></div> Cash Receipt Generator</div>
+            <div class="receipt-layout">
+                <div class="form-container">
+                    <h3>📝 Receipt Details</h3>
+                    <div class="form-group">
+                        <label>Customer Name</label>
+                        <input type="text" id="custName" placeholder="e.g. Muhammed Ali" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Service Name</label>
+                        <input type="text" id="servName" placeholder="e.g. Passport Application" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Amount (₹)</label>
+                        <input type="number" id="amt" placeholder="0.00" step="0.01" min="0" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Method</label>
+                        <select id="payMethod" onchange="updatePreview()">
+                            <option value="Cash">Cash</option>
+                            <option value="UPI">UPI</option>
+                            <option value="Card">Card</option>
+                            <option value="Net Banking">Net Banking</option>
+                        </select>
+                    </div>
+                    <button class="print-trigger-btn" onclick="generateAndPrint()">🖨️ PRINT A4 RECEIPT</button>
+                </div>
+
+                <div class="receipt-preview">
+                    <h3>👁️ Live Preview</h3>
+                    <div class="preview-paper" id="previewPaper">
+                        <div class="empty-preview">Fill the form to see a live preview of your receipt</div>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <!-- ===== VISA SECTION ===== -->
+        <div id="visa" class="section-box">
+            <div class="section-title"><div class="dot" style="background:#22c55e;"></div> Visa Application Services</div>
+            <div class="grid">
+                <div class="card card-highlight">
+                    <span class="card-icon">🛂</span>
+                    <h3>India e-Visa (Official)</h3>
+                    <a href="https://indianvisaonline.gov.in/evisa" target="_blank" class="action-btn">APPLY NOW</a>
+                </div>
+                <div class="card">
+                    <span class="card-icon">📄</span>
+                    <h3>Visa Fee Calculator</h3>
+                    <a href="https://indianvisaonline.gov.in/evisa" target="_blank" class="action-btn">CHECK FEES</a>
+                </div>
+                <div class="card">
+                    <span class="card-icon">🔍</span>
+                    <h3>Visa Status Enquiry</h3>
+                    <a href="https://indianvisaonline.gov.in/evisa" target="_blank" class="action-btn">TRACK STATUS</a>
+                </div>
+                <div class="card">
+                    <span class="card-icon">📋</span>
+                    <h3>Visa Requirements Guide</h3>
+                    <a href="https://indianvisaonline.gov.in/evisa" target="_blank" class="action-btn">VIEW GUIDE</a>
+                </div>
+            </div>
+            <div style="margin-top:12px;padding:12px 16px;background:#1e293b;border-radius:10px;border-left:3px solid #22c55e;font-size:12px;color:#94a3b8;">
+                ⚠️ <strong style="color:#f1f5f9;">Note:</strong> Always use the official Government of India e-Visa portal. Avoid third-party websites claiming to offer visa services. <a href="https://indianvisaonline.gov.in/evisa" target="_blank" style="color:#7dd3fc;">indianvisaonline.gov.in/evisa</a>
+            </div>
+        </div>
+
+        <!-- ===== REVENUE DEPARTMENT ===== -->
+        <div id="revenue" class="section-box">
+            <div class="section-title"><div class="dot" style="background:#f59e0b;"></div> Revenue Department Services</div>
+            <div class="grid">
+                <div class="card card-highlight">
+                    <span class="card-icon">🏛️</span>
+                    <h3>Kerala Revenue Dept (Official)</h3>
+                    <a href="https://revenue.kerala.gov.in/" target="_blank" class="action-btn">OPEN PORTAL</a>
+                </div>
+                <div class="card">
+                    <span class="card-icon">📜</span>
+                    <h3>Revenue e-Services</h3>
+                    <a href="https://www.clr.kerala.gov.in/eng/index.php/services/e-services" target="_blank" class="action-btn">VIEW SERVICES</a>
+                </div>
+                <div class="card">
+                    <span class="card-icon">💰</span>
+                    <h3>Land Tax Payment (ReLIS)</h3>
+                    <a href="https://revenue.kerala.gov.in/" target="_blank" class="action-btn">PAY TAX</a>
+                </div>
+                <div class="card">
+                    <span class="card-icon">📋</span>
+                    <h3>Property Tax (Sanchaya)</h3>
+                    <a href="https://tax.lsgkerala.gov.in/" target="_blank" class="action-btn">PAY PROPERTY TAX</a>
+                </div>
+                <div class="card">
+                    <span class="card-icon">📄</span>
+                    <h3>Revenue MITRAM</h3>
+                    <a href="https://www.clr.kerala.gov.in/eng/index.php/services/e-services" target="_blank" class="action-btn">ACCESS MITRAM</a>
+                </div>
+                <div class="card">
+                    <span class="card-icon">🗂️</span>
+                    <h3>Land Records (ReLIS)</h3>
+                    <a href="https://revenue.kerala.gov.in/" target="_blank" class="action-btn">CHECK RECORDS</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TRAVEL ===== -->
         <div id="travel" class="section-box">
-            <div class="section-title"><div class="dot" style="background: #a855f7;"></div> Passport & Travel Services</div>
+            <div class="section-title"><div class="dot" style="background:#a855f7;"></div> Passport & Travel Services</div>
             <div class="grid">
-                <div class="card"><h3>Passport Seva</h3><a href="https://www.passportindia.gov.in/psp" target="_blank" class="action-btn">OPEN SITE</a></div>
-                <div class="card"><h3>IRCTC Railway Ticket</h3><a href="https://www.irctc.co.in/nget/train-search" target="_blank" class="action-btn">BOOK TICKET</a></div>
+                <div class="card"><span class="card-icon">🛂</span><h3>Passport Seva</h3><a href="https://www.passportindia.gov.in/psp" target="_blank" class="action-btn">OPEN SITE</a></div>
+                <div class="card"><span class="card-icon">🚆</span><h3>IRCTC Railway Ticket</h3><a href="https://www.irctc.co.in/nget/train-search" target="_blank" class="action-btn">BOOK TICKET</a></div>
+                <div class="card"><span class="card-icon">✈️</span><h3>Air India Booking</h3><a href="https://www.airindia.com/" target="_blank" class="action-btn">OPEN SITE</a></div>
+                <div class="card"><span class="card-icon">🌍</span><h3>Visa Application (VFS)</h3><a href="https://www.vfsglobal.com/" target="_blank" class="action-btn">APPLY VISA</a></div>
             </div>
         </div>
 
+        <!-- ===== HEALTH ===== -->
         <div id="health" class="section-box">
-            <div class="section-title"><div class="dot" style="background: #10b981;"></div> Health Services</div>
+            <div class="section-title"><div class="dot" style="background:#10b981;"></div> Health Services</div>
             <div class="grid">
-                <div class="card"><h3>eHealth Kerala Portal</h3><a href="https://ehealth.kerala.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
-                <div class="card"><h3>Digital Health ID (ABHA)</h3><a href="https://abha.abdm.gov.in/" target="_blank" class="action-btn">CREATE ID</a></div>
+                <div class="card"><span class="card-icon">🏥</span><h3>eHealth Kerala Portal</h3><a href="https://ehealth.kerala.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
+                <div class="card"><span class="card-icon">🆔</span><h3>Digital Health ID (ABHA)</h3><a href="https://abha.abdm.gov.in/" target="_blank" class="action-btn">CREATE ID</a></div>
+                <div class="card"><span class="card-icon">💊</span><h3>Ayushman Bharat</h3><a href="https://pmjay.gov.in/" target="_blank" class="action-btn">CHECK ELIGIBILITY</a></div>
+                <div class="card"><span class="card-icon">❤️</span><h3>Karunya Health Scheme</h3><a href="https://karunyam.kerala.gov.in/" target="_blank" class="action-btn">APPLY NOW</a></div>
             </div>
         </div>
 
+        <!-- ===== FINANCE ===== -->
         <div id="finance" class="section-box">
-            <div class="section-title"><div class="dot" style="background: #ec4899;"></div> PAN Card & Finance</div>
+            <div class="section-title"><div class="dot" style="background:#ec4899;"></div> PAN Card & Finance</div>
             <div class="grid">
-                <div class="card"><h3>Protean PAN (NSDL)</h3><a href="https://onlineservices.proteantech.in/paam/endUserRegisterContact.html" target="_blank" class="action-btn">APPLY PAN</a></div>
-                <div class="card"><h3>Income Tax Filing</h3><a href="https://www.incometax.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
+                <div class="card"><span class="card-icon">🆔</span><h3>Protean PAN (NSDL)</h3><a href="https://onlineservices.proteantech.in/paam/endUserRegisterContact.html" target="_blank" class="action-btn">APPLY PAN</a></div>
+                <div class="card"><span class="card-icon">📊</span><h3>Income Tax Filing</h3><a href="https://www.incometax.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
+                <div class="card"><span class="card-icon">🧾</span><h3>GST Registration</h3><a href="https://www.gst.gov.in/" target="_blank" class="action-btn">REGISTER</a></div>
+                <div class="card"><span class="card-icon">🔍</span><h3>UTI PAN Tracker</h3><a href="https://www.utiitsl.com/" target="_blank" class="action-btn">TRACK STATUS</a></div>
             </div>
         </div>
 
+        <!-- ===== RTO ===== -->
         <div id="rto" class="section-box">
-            <div class="section-title"><div class="dot" style="background: #ef4444;"></div> RTO & Vehicle Services</div>
+            <div class="section-title"><div class="dot" style="background:#ef4444;"></div> RTO & Vehicle Services</div>
             <div class="grid">
-                <div class="card"><h3>Vahan (Tax/Transfer)</h3><a href="https://vahan.parivahan.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
-                <div class="card"><h3>Sarathi (License)</h3><a href="https://sarathi.parivahan.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
-                <div class="card"><h3>E-Challan Payment</h3><a href="https://echallan.parivahan.gov.in/" target="_blank" class="action-btn">PAY NOW</a></div>
+                <div class="card"><span class="card-icon">🚗</span><h3>Vahan (Tax/Transfer)</h3><a href="https://vahan.parivahan.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
+                <div class="card"><span class="card-icon">🪪</span><h3>Sarathi (License)</h3><a href="https://sarathi.parivahan.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
+                <div class="card"><span class="card-icon">⚠️</span><h3>E-Challan Payment</h3><a href="https://echallan.parivahan.gov.in/" target="_blank" class="action-btn">PAY NOW</a></div>
+                <div class="card"><span class="card-icon">🛣️</span><h3>FASTag Recharge</h3><a href="https://www.nhai.gov.in/" target="_blank" class="action-btn">RECHARGE</a></div>
             </div>
         </div>
 
+        <!-- ===== GOVT ===== -->
         <div id="govt" class="section-box">
-            <div class="section-title"><div class="dot" style="background: #fbbf24;"></div> Government & Voter Services</div>
+            <div class="section-title"><div class="dot" style="background:#fbbf24;"></div> Government & Voter Services</div>
             <div class="grid">
-                <div class="card"><h3>Voter Service Portal</h3><a href="https://voters.eci.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
-                <div class="card"><h3>K-SMART LSGD</h3><a href="https://ksmart.lsgkerala.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
-                <div class="card"><h3>My Aadhar Portal</h3><a href="https://myaadhaar.uidai.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
-                <div class="card"><h3>E-District Kerala</h3><a href="https://edistrict.kerala.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
+                <div class="card"><span class="card-icon">🗳️</span><h3>Voter Service Portal</h3><a href="https://voters.eci.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
+                <div class="card"><span class="card-icon">🏘️</span><h3>K-SMART LSGD</h3><a href="https://ksmart.lsgkerala.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
+                <div class="card"><span class="card-icon">🆔</span><h3>My Aadhar Portal</h3><a href="https://myaadhaar.uidai.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
+                <div class="card"><span class="card-icon">📑</span><h3>E-District Kerala</h3><a href="https://edistrict.kerala.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
+                <div class="card"><span class="card-icon">🔗</span><h3>PAN-Aadhar Link</h3><a href="https://eportal.incometax.gov.in/" target="_blank" class="action-btn">LINK NOW</a></div>
+                <div class="card"><span class="card-icon">📁</span><h3>DigiLocker</h3><a href="https://www.digilocker.gov.in/" target="_blank" class="action-btn">OPEN SITE</a></div>
             </div>
         </div>
 
+        <!-- ===== PAYMENT ===== -->
         <div id="payment" class="section-box">
-            <div class="section-title"><div class="dot" style="background: #3b82f6;"></div> Treasury & Welfare Boards</div>
+            <div class="section-title"><div class="dot" style="background:#3b82f6;"></div> Treasury & Welfare Boards</div>
             <div class="grid">
-                <div class="card"><h3>E-Treasury Receipts</h3><a href="https://etreasury.kerala.gov.in/index.php/departmental_receipts" target="_blank" class="action-btn">OPEN SITE</a></div>
-                <div class="card"><h3>Legal Metrology (LMOMS)</h3><a href="https://lmoms.kerala.gov.in/lmoms_verify/guestLogin" target="_blank" class="action-btn">GUEST LOGIN</a></div>
-                <div class="card"><h3>Motor Workers Welfare</h3><a href="https://kmtwwfb.kerala.gov.in/" target="_blank" class="action-btn">OPEN PORTAL</a></div>
+                <div class="card"><span class="card-icon">🏦</span><h3>E-Treasury Receipts</h3><a href="https://etreasury.kerala.gov.in/index.php/departmental_receipts" target="_blank" class="action-btn">OPEN SITE</a></div>
+                <div class="card"><span class="card-icon">⚖️</span><h3>Legal Metrology (LMOMS)</h3><a href="https://lmoms.kerala.gov.in/lmoms_verify/guestLogin" target="_blank" class="action-btn">GUEST LOGIN</a></div>
+                <div class="card"><span class="card-icon">🚌</span><h3>Motor Workers Welfare</h3><a href="https://kmtwwfb.kerala.gov.in/" target="_blank" class="action-btn">OPEN PORTAL</a></div>
+                <div class="card"><span class="card-icon">🏠</span><h3>Building Tax Payment</h3><a href="https://lsgkerala.gov.in/" target="_blank" class="action-btn">PAY TAX</a></div>
             </div>
         </div>
-    </div>
 
+        <!-- ===== HISTORY ===== -->
+        <div id="history" class="section-box">
+            <div class="history-panel">
+                <h3>
+                    📋 Receipt History
+                    <button class="history-clear" onclick="clearHistory()">Clear All</button>
+                </h3>
+                <div id="historyContent"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===== PRINTABLE RECEIPT ===== -->
     <div id="printableReceipt">
         <div class="receipt-copy">
-            <div style="text-align:right; font-size:10px; font-weight:bold; color: #333;">CUSTOMER COPY</div>
+            <div class="copy-label">CUSTOMER COPY</div>
             <div class="receipt-header">
-                <h2 style="font-size: 24px; color: black;">ASMA'S ONLINE SERVICE CENTER</h2>
-                <p style="font-size: 13px;">Kozhikode, Kerala | Ph: +91 0000000000</p>
+                <h2>ASMA'S ONLINE SERVICE CENTER</h2>
+                <p>Kozhikode, Kerala | Ph: +91 00000 00000</p>
+                <p>GSTIN: 32XXXXXXXXXXX | Email: info@asmasonline.com</p>
             </div>
+            <div class="receipt-row"><span>Receipt No:</span><strong id="pRno1"></strong></div>
             <div class="receipt-row"><span>Date:</span><strong id="pDate1"></strong></div>
             <div class="receipt-row"><span>Customer Name:</span><strong id="pCust1"></strong></div>
             <div class="receipt-row"><span>Service:</span><strong id="pServ1"></strong></div>
-            <div class="receipt-row" style="border:none; margin-top:20px; font-size:22px;">
+            <div class="receipt-row"><span>Payment Method:</span><strong id="pPay1"></strong></div>
+            <div class="receipt-total">
                 <span>Total Amount:</span><strong>₹ <span id="pAmt1"></span></strong>
             </div>
-            <div style="margin-top:40px; text-align:right; font-size: 13px;">Authorized Signatory</div>
+            <p style="font-size:10px;color:#555;margin-top:14px;">Thank you for choosing Asma's Online. This is a computer-generated receipt.</p>
+            <div style="margin-top:36px;text-align:right;font-size:13px;font-weight:600;">Authorized Signatory</div>
         </div>
 
-        <div class="receipt-copy" style="border-style: dashed;">
-            <div style="text-align:right; font-size:10px; font-weight:bold; color: #333;">OFFICE COPY</div>
+        <div class="receipt-copy">
+            <div class="copy-label">OFFICE COPY</div>
             <div class="receipt-header">
-                <h2 style="font-size: 20px; color: black;">ASMA'S ONLINE SERVICE CENTER</h2>
+                <h2>ASMA'S ONLINE SERVICE CENTER</h2>
+                <p>Kozhikode, Kerala | Ph: +91 00000 00000</p>
             </div>
+            <div class="receipt-row"><span>Receipt No:</span><strong id="pRno2"></strong></div>
             <div class="receipt-row"><span>Date:</span><strong id="pDate2"></strong></div>
             <div class="receipt-row"><span>Customer Name:</span><strong id="pCust2"></strong></div>
             <div class="receipt-row"><span>Service:</span><strong id="pServ2"></strong></div>
-            <div class="receipt-row" style="border:none; font-size:20px;">
-                <span>Amount:</span><strong>₹ <span id="pAmt2"></span></strong>
+            <div class="receipt-row"><span>Payment Method:</span><strong id="pPay2"></strong></div>
+            <div class="receipt-total">
+                <span>Total Amount:</span><strong>₹ <span id="pAmt2"></span></strong>
             </div>
+            <div style="margin-top:36px;text-align:right;font-size:13px;font-weight:600;">Authorized Signatory</div>
         </div>
     </div>
 
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast"></div>
+
     <script>
-        function generateAndPrint() {
-            const name = document.getElementById('custName').value;
-            const service = document.getElementById('servName').value;
-            const amount = document.getElementById('amt').value;
-            const date = new Date().toLocaleDateString('en-IN', {day:'2-digit', month:'long', year:'numeric'});
+        // ============================================================
+        // STATE
+        // ============================================================
+        const STORAGE_KEY = 'asma_receipts_v15';
+        let receiptHistory = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 
-            document.getElementById('pDate1').innerText = date;
-            document.getElementById('pCust1').innerText = name;
-            document.getElementById('pServ1').innerText = service;
-            document.getElementById('pAmt1').innerText = amount;
-
-            document.getElementById('pDate2').innerText = date;
-            document.getElementById('pCust2').innerText = name;
-            document.getElementById('pServ2').innerText = service;
-            document.getElementById('pAmt2').innerText = amount;
-
-            window.print();
+        // ============================================================
+        // TOAST
+        // ============================================================
+        let toastTimer;
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = (isError ? '⚠ ' : '✓ ') + msg;
+            toast.classList.toggle('error', isError);
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        function searchServices() {
-            let input = document.getElementById('searchInput').value.toLowerCase();
-            let cards = document.getElementsByClassName('card');
-            for (let i = 0; i < cards.length; i++) {
-                let h3 = cards[i].getElementsByTagName('h3')[0];
-                if (h3 && h3.innerText.toLowerCase().includes(input)) {
-                    cards[i].style.display = "";
-                } else {
-                    cards[i].style.display = "none";
-                }
+        // ============================================================
+        // SIDEBAR
+        // ============================================================
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('backdrop').classList.toggle('show');
+        }
+
+        function scrollToSection(id, el) {
+            const section = document.getElementById(id);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            if (el) el.classList.add('active');
+
+            if (window.innerWidth <= 760) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('backdrop').classList.remove('show');
             }
         }
+
+        // ============================================================
+        // LIVE PREVIEW
+        // ============================================================
+        function updatePreview() {
+            const name = document.getElementById('custName').value.trim();
+            const service = document.getElementById('servName').value.trim();
+            const amount = document.getElementById('amt').value;
+            const method = document.getElementById('payMethod').value;
+
+            const paper = document.getElementById('previewPaper');
+
+            if (!name && !service && !amount) {
+                paper.innerHTML = '<div class="empty-preview">Fill the form to see a live preview of your receipt</div>';
+                return;
+            }
+
+            const date = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
+            const amtDisplay = amount ? parseFloat(amount).toFixed(2) : '0.00';
+
+            paper.innerHTML = `
+                <div class="pv-header">
+                    <h4>ASMA'S ONLINE</h4>
+                    <p>Kozhikode, Kerala</p>
+                </div>
+                <div class="pv-row"><span>Date:</span><strong>${date}</strong></div>
+                <div class="pv-row"><span>Customer:</span><strong>${escapeHTML(name) || '—'}</strong></div>
+                <div class="pv-row"><span>Service:</span><strong>${escapeHTML(service) || '—'}</strong></div>
+                <div class="pv-row"><span>Payment:</span><strong>${method}</strong></div>
+                <div class="pv-total"><span>Total:</span><strong>₹ ${amtDisplay}</strong></div>
+                <div class="pv-sign">Authorized Signatory</div>
+            `;
+        }
+
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        // ============================================================
+        // GENERATE & PRINT
+        // ============================================================
+        function generateAndPrint() {
+            const name = document.getElementById('custName').value.trim();
+            const service = document.getElementById('servName').value.trim();
+            const amount = parseFloat(document.getElementById('amt').value);
+            const method = document.getElementById('payMethod').value;
+
+            if (!name) { showToast('Please enter customer name', true); return; }
+            if (!service) { showToast('Please enter service name', true); return; }
+            if (isNaN(amount) || amount <= 0) { showToast('Please enter a valid amount', true); return; }
+
+            const now = new Date();
+            const date = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
+            const receiptNo = 'ASM-' + now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0') + '-' + String(receiptHistory.length + 1).padStart(4, '0');
+            const amtDisplay = amount.toFixed(2);
+
+            ['1', '2'].forEach(n => {
+                document.getElementById('pRno' + n).innerText = receiptNo;
+                document.getElementById('pDate' + n).innerText = date;
+                document.getElementById('pCust' + n).innerText = name;
+                document.getElementById('pServ' + n).innerText = service;
+                document.getElementById('pPay' + n).innerText = method;
+                document.getElementById('pAmt' + n).innerText = amtDisplay;
+            });
+
+            receiptHistory.unshift({
+                receiptNo, date, name, service, method, amount,
+                timestamp: now.getTime()
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(receiptHistory));
+            renderHistory();
+            updateTopStats();
+
+            window.print();
+
+            setTimeout(() => {
+                document.getElementById('custName').value = '';
+                document.getElementById('servName').value = '';
+                document.getElementById('amt').value = '';
+                updatePreview();
+                showToast(`Receipt ${receiptNo} generated`);
+            }, 500);
+        }
+
+        // ============================================================
+        // HISTORY
+        // ============================================================
+        function renderHistory() {
+            const container = document.getElementById('historyContent');
+
+            if (receiptHistory.length === 0) {
+                container.innerHTML = '<div class="history-empty">No receipts yet. Generate your first receipt above!</div>';
+                return;
+            }
+
+            const rows = receiptHistory.map((r, i) => `
+                <tr>
+                    <td style="color:#7dd3fc;font-weight:600;">${r.receiptNo}</td>
+                    <td>${r.date}</td>
+                    <td>${escapeHTML(r.name)}</td>
+                    <td>${escapeHTML(r.service)}</td>
+                    <td>${r.method}</td>
+                    <td class="history-amount">₹${r.amount.toFixed(2)}</td>
+                    <td class="history-actions">
+                        <button onclick="reprint(${i})">Reprint</button>
+                        <button onclick="deleteReceipt(${i})" style="border-color:#ef4444;color:#ef4444;margin-left:4px;">Del</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            container.innerHTML = `
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Receipt No</th><th>Date</th><th>Customer</th>
+                            <th>Service</th><th>Payment</th><th style="text-align:right;">Amount</th><th style="text-align:center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            `;
+        }
+
+        function reprint(index) {
+            const r = receiptHistory[index];
+            if (!r) return;
+            ['1', '2'].forEach(n => {
+                document.getElementById('pRno' + n).innerText = r.receiptNo;
+                document.getElementById('pDate' + n).innerText = r.date;
+                document.getElementById('pCust' + n).innerText = r.name;
+                document.getElementById('pServ' + n).innerText = r.service;
+                document.getElementById('pPay' + n).innerText = r.method;
+                document.getElementById('pAmt' + n).innerText = r.amount.toFixed(2);
+            });
+            window.print();
+            showToast(`Reprinting ${r.receiptNo}`);
+        }
+
+        function deleteReceipt(index) {
+            if (!confirm('Delete this receipt permanently?')) return;
+            const r = receiptHistory[index];
+            receiptHistory.splice(index, 1);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(receiptHistory));
+            renderHistory();
+            updateTopStats();
+            showToast(`Receipt ${r.receiptNo} deleted`);
+        }
+
+        function clearHistory() {
+            if (receiptHistory.length === 0) { showToast('No receipts to clear', true); return; }
+            if (!confirm('Clear all ' + receiptHistory.length + ' receipts? This cannot be undone.')) return;
+            receiptHistory = [];
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(receiptHistory));
+            renderHistory();
+            updateTopStats();
+            showToast('All receipts cleared');
+        }
+
+        // ============================================================
+        // TOP STATS
+        // ============================================================
+        function updateTopStats() {
+            const today = new Date();
+            const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+
+            const todayReceipts = receiptHistory.filter(r => r.timestamp >= todayStart);
+            const todayRevenue = todayReceipts.reduce((sum, r) => sum + r.amount, 0);
+
+            document.getElementById('todayReceipts').innerText = todayReceipts.length;
+            document.getElementById('todayRevenue').innerText = '₹' + todayRevenue.toFixed(0);
+        }
+
+        // ============================================================
+        // SEARCH SERVICES
+        // ============================================================
+        function searchServices() {
+            const input = document.getElementById('searchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                const title = card.querySelector('h3').innerText.toLowerCase();
+                card.style.display = title.includes(input) ? '' : 'none';
+            });
+
+            document.querySelectorAll('.section-box').forEach(sec => {
+                if (sec.id === 'receipt' || sec.id === 'history') return;
+                const visibleCards = sec.querySelectorAll('.card:not([style*="display: none"])');
+                sec.style.display = (visibleCards.length === 0 && input !== '') ? 'none' : '';
+            });
+        }
+
+        // ============================================================
+        // KEYBOARD SHORTCUTS
+        // ============================================================
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                generateAndPrint();
+            }
+            if (e.key === 'Escape') {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('backdrop').classList.remove('show');
+            }
+        });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        window.addEventListener('load', () => {
+            renderHistory();
+            updateTopStats();
+            updatePreview();
+        });
     </script>
 </body>
 </html>
